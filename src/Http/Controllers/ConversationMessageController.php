@@ -58,6 +58,10 @@ class ConversationMessageController extends Controller
 
     public function store(StoreMessage $request, $conversationId)
     {
+        if ($request->participant_id !== $request->user()->id) {
+            abort(403, 'Access denied');
+        }
+
         $conversation = Chat::conversations()->getById($conversationId);
         $message = Chat::message($request->getMessageBody())
             ->from($request->getParticipant())
