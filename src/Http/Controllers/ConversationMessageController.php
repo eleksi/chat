@@ -42,6 +42,10 @@ class ConversationMessageController extends Controller
             ->setPaginationParams($request->getPaginationParams())
             ->getMessages();
 
+        if ($message) {
+            Chat::conversation($conversation)->setParticipant($request->user())->readAll();
+        }
+
         if ($this->messageTransformer) {
             return fractal($message, $this->messageTransformer)->respond();
         }
