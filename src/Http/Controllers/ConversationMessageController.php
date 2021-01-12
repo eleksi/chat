@@ -38,6 +38,7 @@ class ConversationMessageController extends Controller
         $conversation = Chat::conversations()->getById($conversationId);
         $message = Chat::conversation($conversation)
             ->setParticipant($request->getParticipant())
+            ->setParticipant($request->user())
             ->setPaginationParams($request->getPaginationParams())
             ->getMessages();
 
