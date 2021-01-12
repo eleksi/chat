@@ -55,6 +55,14 @@ class ConversationController extends Controller
     public function store(StoreConversation $request)
     {
         $participants = $request->participants();
+        $participant_collection = collect($participants);
+        $participant_ids = $participant_collection->map(function ($participant) {
+            return $participant->id;
+        });
+        if (!$participant_ids->contains($request->user()->id)) {
+            abort(403, 'Access denied');
+        }
+
         $conversation = Chat::createConversation($participants, $request->input('data', []));
 
         return $this->itemResponse($conversation);
